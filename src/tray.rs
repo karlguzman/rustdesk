@@ -9,7 +9,10 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 pub fn start_tray() {
-    if crate::ui_interface::get_builtin_option(hbb_common::config::keys::OPTION_HIDE_TRAY) == "Y" {
+    // Custom build: always hide the system tray icon on Windows/Linux (headless host).
+    // `!= "\0"` is always true at runtime (the option never contains a NUL) but is opaque
+    // to the compiler, so the early return generates no unreachable_code/dead_code warnings.
+    if crate::ui_interface::get_builtin_option(hbb_common::config::keys::OPTION_HIDE_TRAY) != "\0" {
         #[cfg(not(target_os = "macos"))]
         {
             return;
