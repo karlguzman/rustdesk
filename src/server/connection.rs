@@ -6002,7 +6002,9 @@ async fn start_ipc(
     if stream.is_none() {
         #[allow(unused_mut)]
         #[allow(unused_assignments)]
-        let mut args = vec!["--cm"];
+        // Custom build: always run the connection manager headless (no window, no tray,
+        // no per-connection popup). Upstream only uses --cm-no-ui for Linux headless.
+        let mut args = vec!["--cm-no-ui"];
         #[allow(unused_mut)]
         #[cfg(target_os = "linux")]
         let mut user = None;
